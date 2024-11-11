@@ -23,13 +23,16 @@ app.get("/", function (req, res) {
 app.get("/api/hello", function (req, res) {
   res.json({greeting: 'hello API'});
 });
-
+app.get('/api',(req,res)=>{
+  const date = new Date()
+  res.json({unix:date.getTime(),utc:date.toUTCString()})
+})
 app.get('/api/:date',(req,res)=>{
   const {date} = req.params;
-  
   const newDate = !isNaN(date) ? new Date(Number(date)) : new Date(date);  
-  console.log(newDate.getTime())
- 
+  if(newDate.toString() === 'Invalid Date'){
+    res.status(400).json({error:"Invalid Date"})
+  }
   res.json({unix:newDate.getTime(),utc:newDate.toUTCString()})
 })
 
